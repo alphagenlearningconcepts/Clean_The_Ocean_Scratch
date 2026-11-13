@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clean the Ocean | Alphagen Learning</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    --purple: #5E48C4;
+    --purpleDark: #4A3AAD;
+    --purpleMid: #7B6ED4;
+    --pale: #EAE7FE;
+    --ghost: #F5F4FF;
+    --yellow: #FFD071;
+    --yellowDark: #E6B84A;
+    --nearBlack: #1A1A1A;
+    --green: #22C55E;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Poppins, sans-serif;
+    background: var(--ghost);
+    color: var(--nearBlack);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+button { font-family: inherit; cursor: pointer; }
+
+header {
+    width: 100%;
+    background: var(--purple);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    flex-wrap: wrap;
+    box-shadow: 0 3px 10px #00000012;
+    flex-shrink: 0;
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    background: var(--yellow);
+    color: var(--nearBlack);
+    padding: 9px 15px;
+    border-radius: 11px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.header-title {
+    font-weight: 800;
+    font-size: 17px;
+}
+
+.icon-btn, .counter {
+    background: var(--purpleDark);
+    border: none;
+    color: white;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 18px;
+}
+
+.slide {
+    display: none;
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.slide.active { display: flex; }
+
+.slide-title {
+    font-size: clamp(24px, 3vw, 35px);
+    font-weight: 800;
+    text-align: center;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    margin: 0;
+}
+
+.tag {
+    background: var(--pale);
+    color: var(--purple);
+    padding: 7px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.card {
+    background: white;
+    border: 2px solid var(--pale);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 5px 15px #5e48c410;
+    min-width: 0;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+.grid4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    width: 100%;
+}
+
+.btn {
+    border: none;
+    border-radius: 12px;
+    background: var(--purple);
+    color: white;
+    padding: 11px 20px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: .2s;
+}
+
+.btn:hover:not(:disabled) {
+    background: var(--purpleDark);
+}
+
+.btn-yellow {
+    background: var(--yellow);
+    color: var(--nearBlack);
+}
+
+.btn-yellow:hover:not(:disabled) {
+    background: var(--yellowDark);
+}
+
+.btn-outline {
+    background: white;
+    color: var(--purple);
+    border: 2px solid var(--purple);
+}
+
+.btn-outline:hover:not(:disabled) {
+    background: var(--pale);
+}
+
+.question {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 0 12px;
+}
+
+.choice {
+    border: 2px solid #dedbea;
+    background: #faf9ff;
+    border-radius: 13px;
+    padding: 11px;
+    font-weight: 700;
+    font-size: 13px;
+    width: 100%;
+    transition: .15s;
+}
+
+.choice:hover:not(:disabled) {
+    border-color: var(--purple);
+}
+
+.choice.correct {
+    background: #dcfce7;
+    border-color: #16a34a;
+}
+
+.choice.wrong {
+    background: #fff1f2;
+    border-color: #ef4444;
+}
+
+.choice:disabled { cursor: default; }
+
+.feedback {
+    min-height: 22px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--purple);
+    margin-top: 9px;
+}
+
+.scratch {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: white;
+    font: 600 13px Arial, sans-serif;
+    box-shadow: inset 0 -3px #0002;
+    max-width: 100%;
+}
+
+.scratch-motion { background: #4C97FF; }
+.scratch-looks { background: #9966FF; }
+.scratch-control { background: #FFAB19; }
+.scratch-sensing { background: #5CB1D6; }
+.scratch-variable { background: #FF8C1A; }
+.scratch-custom { background: #FF6680; }
+.scratch-event { background: #FFBF00; }
+
+.bubble {
+    background: white;
+    color: #222;
+    border-radius: 20px;
+    padding: 3px 8px;
+    font-weight: 700;
+}
+
+.ocean {
+    width: 100%;
+    height: 245px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 3px solid #B8E8FF;
+    background: linear-gradient(
+        180deg,
+        #87E6FF 0%,
+        #4AC6ED 35%,
+        #1686CA 75%,
+        #0769A5 100%
+    );
+}
+
+.ocean::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background: #EED59D;
+    opacity: .8;
+}
+
+.ocean-bubbles {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #ffffff80;
+    font-size: 27px;
+    letter-spacing: 25px;
+}
+
+.fish {
+    position: absolute;
+    font-size: 52px;
+    left: 30%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    transition: left .25s, top .25s;
+    z-index: 2;
+}
+
+.trash {
+    position: absolute;
+    font-size: 37px;
+    z-index: 2;
+}
+
+.seaweed {
+    position: absolute;
+    bottom: 7px;
+    font-size: 40px;
+    z-index: 1;
+}
+
+.bin {
+    position: absolute;
+    bottom: 17px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 49px;
+    z-index: 3;
+}
+
+.step-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    min-height: 180px;
+}
+
+.step-icon {
+    font-size: 44px;
+    width: 80px;
+    height: 80px;
+    background: var(--ghost);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-number {
+    font-size: 13px;
+    color: var(--purple);
+    font-weight: 800;
+}
+
+.step-description {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.explore-card {
+    background: #F0EDFF;
+    border: 2px solid #C9C1FF;
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+}
+
+.explore-card h3 {
+    color: var(--purple);
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.explore-card p {
+    font-size: 12px;
+    color: #555;
+    margin: 8px 0 13px;
+}
+
+.action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    justify-content: center;
+}
+
+.mini-label {
+    background: white;
+    border-radius: 10px;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--purple);
+}
+
+.sequence-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--pale);
+    background: #faf9ff;
+    border-radius: 12px;
+    padding: 11px;
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.sequence-item.selected {
+    border-color: var(--purple);
+    background: var(--pale);
+}
+
+.sequence-number {
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: var(--purple);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.quiz-options .choice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 67px;
+}
+
+.revision-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 12px;
+}
+
+.game-preview {
+    width: 100%;
+    max-width: 410px;
+    height: 250px;
+    object-fit: contain;
+    border-radius: 12px;
+    margin: auto;
+}
+
+footer {
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 20px;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+footer select {
+    border: 2px solid var(--pale);
+    border-radius: 10px;
+    padding: 9px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--purple);
+    background: white;
+    max-width: 220px;
+}
+
+@media (max-width: 750px) {
+    .grid4 { grid-template-columns: repeat(2, 1fr); }
+    .grid2 { grid-template-columns: 1fr; }
+    .card { padding: 14px; }
+    .ocean { height: 210px; }
+    .header-title { font-size: 13px; }
+    .step-card { min-height: 150px; }
+    .step-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 34px;
+    }
+}
+
+@media (max-width: 450px) {
+    .quiz-options { grid-template-columns: 1fr; }
+    .logo { font-size: 10px; }
+    footer { padding: 9px; }
+    footer .btn { padding: 9px; font-size: 11px; }
+    footer select { max-width: 115px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-left">
+        <div class="logo">ALPHAGEN LEARNING</div>
+        <div class="header-title">Scratch - Game Based Learning</div>
+    </div>
+
+    <div class="header-right">
+        <button class="icon-btn" id="soundBtn"
+                onclick="toggleSound()" title="Toggle sound">
+            <i class="fa-solid fa-volume-high"></i>
+        </button>
+        <div class="counter" id="slideCounter">1 / 10</div>
+    </div>
+</header>
+
+<main id="mainContent">
+
+<!-- ================================================= -->
+<!-- SLIDE 1 - WELCOME -->
+<!-- ================================================= -->
+
+<section class="slide active" id="slide1">
+
+    <div class="tag">SCRATCH GAME DEVELOPMENT</div>
+
+    <div style="font-size:76px">🌊 🐟 ♻️</div>
+
+    <h1 class="slide-title"
+        style="color:var(--purple);font-size:42px">
+        Clean the Ocean!
+    </h1>
+
+   
+    <div class="action-row">
+        <span class="mini-label">🐟 Fish</span>
+        <span class="mini-label">🌊 Ocean</span>
+        <span class="mini-label">♻️ Clean Up</span>
+    </div>
+
+    <button class="btn btn-yellow"
+            onclick="go(2)"
+            style="margin-top:15px">
+        Start Adventure
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 2 - PLAY GAME -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide2">
+
+    <div class="tag">LET'S PLAY</div>
+
+    <h2 class="slide-title">
+        Play Clean the Ocean!
+    </h2>
+
+    <div class="card"
+         style="width:100%;max-width:580px;text-align:center">
+
+        <a href="https://scratch.mit.edu/projects/924963989/"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open Clean the Ocean Scratch project">
+
+            <img
+                class="game-preview"
+                src="https://uploads.scratch.mit.edu/get_image/project/924963989_480x360.png"
+                alt="Clean the Ocean Scratch game preview"
+                onerror="this.style.display='none';document.getElementById('gameFallback').style.display='block'"
+            >
+
+            <div id="gameFallback"
+                 style="display:none;font-size:65px;padding:35px">
+                🌊 🐟 ♻️
+            </div>
+
+        </a>
+
+        <div style="margin-top:17px">
+
+            <a class="btn"
+               href="https://scratch.mit.edu/projects/924963989/"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="display:inline-block;text-decoration:none">
+
+                <i class="fa-solid fa-play"></i>
+                Open Scratch Game
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+  
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 3 - WARM-UP -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide3">
+
+    <div class="tag">WARM-UP</div>
+
+    <h2 class="slide-title">
+        Think Like a Game Creator!
+    </h2>
+
+    <div class="grid2">
+
+        <div class="card">
+
+            <div style="font-size:35px;text-align:center;margin-bottom:12px">
+                🐟 🌊
+            </div>
+
+            <p class="question">
+                What could happen when rubbish is collected?
+            </p>
+
+            <p class="subtitle" style="margin-bottom:13px">
+                Choose your idea. There is no wrong answer!
+            </p>
+
+            <div style="display:grid;gap:9px">
+
+                <button class="choice"
+                        onclick="choosePrediction(this)">
+                    🧹 The rubbish disappears
+                </button>
+
+                <button class="choice"
+                        onclick="choosePrediction(this)">
+                    ✨ A cleaning effect appears
+                </button>
+
+                <button class="choice"
+                        onclick="choosePrediction(this)">
+                    ⭐ The score increases
+                </button>
+
+            </div>
+
+            <div class="feedback" id="predictionFeedback"></div>
+
+        </div>
+
+        <div class="card">
+
+            <p class="question">Arrange the Game Steps</p>
+
+            <p class="subtitle" style="margin-bottom:13px">
+                Click the steps in the correct order.
+            </p>
+
+            <div id="sequenceChoices"
+                 style="display:grid;gap:9px">
+
+                <button class="sequence-item"
+                        onclick="selectStep(this,3)">
+                    <span class="sequence-number">?</span>
+                    🎯 Detect rubbish
+                </button>
+
+                <button class="sequence-item"
+                        onclick="selectStep(this,1)">
+                    <span class="sequence-number">?</span>
+                    🎨 Create the ocean
+                </button>
+
+                <button class="sequence-item"
+                        onclick="selectStep(this,4)">
+                    <span class="sequence-number">?</span>
+                    ⭐ Update the score
+                </button>
+
+                <button class="sequence-item"
+                        onclick="selectStep(this,2)">
+                    <span class="sequence-number">?</span>
+                    🐟 Add movement
+                </button>
+
+            </div>
+
+            <div class="feedback" id="sequenceFeedback"></div>
+
+            <button class="btn btn-outline"
+                    onclick="resetSequence()"
+                    style="margin-top:8px">
+                <i class="fa-solid fa-rotate-right"></i>
+                Reset
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 4 - GAME DEVELOPMENT PLAN -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide4">
+
+    <div class="tag">GAME DEVELOPMENT PLAN</div>
+
+    <h2 class="slide-title">
+        Let's Build in 4 Parts!
+    </h2>
+
+    <div class="grid4">
+
+        <div class="card step-card">
+            <div class="step-icon">🗑️</div>
+            <div class="step-number">PART 1</div>
+            <strong>Design the Game</strong>
+            <div class="step-description">
+                Add the backdrop, bin and rubbish sprite.
+            </div>
+        </div>
+
+        <div class="card step-card">
+            <div class="step-icon">🐟</div>
+            <div class="step-number">PART 2</div>
+            <strong>Fish Movement</strong>
+            <div class="step-description">
+                Code the fish movement.
+            </div>
+        </div>
+
+        <div class="card step-card">
+            <div class="step-icon">📹</div>
+            <div class="step-number">PART 3</div>
+            <strong>Video Sensing</strong>
+            <div class="step-description">
+                Add video sensing and code rubbish movement.
+            </div>
+        </div>
+
+        <div class="card step-card">
+            <div class="step-icon">⭐</div>
+            <div class="step-number">PART 4</div>
+            <strong>Score</strong>
+            <div class="step-description">
+                Code the score.
+            </div>
+        </div>
+
+    </div>
+
+    <button class="btn btn-yellow" onclick="go(5)">
+        Let's Build!
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 5 - DESIGN -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide5">
+
+    <div class="tag">PART 1 • DESIGN</div>
+
+    <h2 class="slide-title">
+        Create Your Ocean World!
+    </h2>
+
+    <div class="grid2">
+
+        <div class="card">
+
+            <div class="ocean">
+
+                <div class="ocean-bubbles">○ ○ ○</div>
+
+                <div class="fish"
+                     style="left:30%;top:48%">
+                    🐟
+                </div>
+
+                <div class="trash"
+                     id="designTrash"
+                     style="left:70%;top:35%">
+                    🧴
+                </div>
+
+                <div class="bin" style="left:82%">
+                    🗑️
+                </div>
+
+                <div class="seaweed" style="left:12%">
+                    🌿
+                </div>
+
+                <div class="seaweed" style="right:13%">
+                    🌱
+                </div>
+
+            </div>
+
+            <p class="subtitle" style="margin-top:12px">
+                Our ocean game scene
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <p class="question">
+                What will you add to your Scratch project?
+            </p>
+
+            <div style="display:grid;gap:10px">
+
+                <div class="mini-label">🌊 Ocean Backdrop</div>
+                <div class="mini-label">🐟 Fish Sprite</div>
+                <div class="mini-label">🧴 Rubbish Sprite</div>
+                <div class="mini-label">🗑️ Bin Sprite</div>
+
+            </div>
+
+            <div class="explore-card" style="margin-top:15px">
+
+                <strong style="color:var(--purple)">
+                    Your Design Challenge
+                </strong>
+
+                <p>
+                    Choose a different rubbish sprite for your game!
+                </p>
+
+                <div class="action-row">
+
+                    <button class="choice"
+                            style="width:auto"
+                            onclick="changeTrash('🥤',this)">
+                        🥤 Cup
+                    </button>
+
+                    <button class="choice"
+                            style="width:auto"
+                            onclick="changeTrash('🧴',this)">
+                        🧴 Bottle
+                    </button>
+
+                    <button class="choice"
+                            style="width:auto"
+                            onclick="changeTrash('📰',this)">
+                        📰 Paper
+                    </button>
+
+                </div>
+
+                <div class="feedback" id="designFeedback"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 6 - FISH MOVEMENT AND FUNCTIONS -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide6">
+
+    <div class="tag">PART 2 • FISH MOVEMENT</div>
+
+    <h2 class="slide-title">
+        Let's Move the Fish!
+    </h2>
+
+    <div class="grid2">
+
+        <div class="card">
+
+            <div class="ocean" id="movementOcean">
+
+                <div class="ocean-bubbles">○ ○ ○</div>
+
+                <div class="fish" id="movingFish">
+                    🐟
+                </div>
+
+                <div class="seaweed" style="left:10%">
+                    🌿
+                </div>
+
+                <div class="seaweed" style="right:10%">
+                    🌱
+                </div>
+
+            </div>
+
+            <div class="action-row" style="margin-top:14px">
+
+                <button class="btn"
+                        onclick="moveFish(-1,0)">
+                    ⬅ Left
+                </button>
+
+                <button class="btn"
+                        onclick="moveFish(1,0)">
+                    Right ➡
+                </button>
+
+                <button class="btn btn-yellow"
+                        onclick="moveFish(0,-1)">
+                    ⬆ Up
+                </button>
+
+                <button class="btn btn-yellow"
+                        onclick="moveFish(0,1)">
+                    ⬇ Down
+                </button>
+
+            </div>
+
+            <div class="feedback" id="fishFeedback">
+                Use the buttons to move the fish.
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="tag" style="display:inline-block">
+                CONCEPT CHECK
+            </div>
+
+            <h3 style="font-size:20px;font-weight:800;margin:12px 0">
+                Custom Blocks (Functions)
+            </h3>
+
+            <p class="question">
+                Which block runs your custom "move fish" instructions?
+            </p>
+
+            <div class="quiz-options" data-quiz="functions">
+
+                <button class="choice"
+                        onclick="answer('functions',this,true)">
+
+                    <span class="scratch scratch-custom">
+                        move fish
+                    </span>
+
+                </button>
+
+                <button class="choice"
+                        onclick="answer('functions',this,false)">
+
+                    <span class="scratch scratch-custom">
+                        define move fish
+                    </span>
+
+                </button>
+
+            </div>
+
+            <div class="feedback" id="functions-feedback"></div>
+
+            <div class="revision-row">
+
+                <button class="btn btn-outline">
+                    <i class="fa-solid fa-book-open"></i>
+                                        <a href="https://scratchconceptfunction.vercel.app/" target="_blank">Explore functions</a> 
+                </button>
+
+            </div>
+
+          
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 7 - VIDEO SENSING -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide7">
+
+    <div class="tag">PART 3 • VIDEO SENSING</div>
+
+    <h2 class="slide-title">
+        Control the Game with Movement!
+    </h2>
+
+    <div class="grid2">
+
+        <div class="card">
+
+            <div class="ocean">
+
+                <div class="ocean-bubbles">○ ○ ○</div>
+
+                <div class="trash"
+                     id="videoTrash"
+                     style="left:45%;top:15%">
+                    🧴
+                </div>
+
+                <div class="bin">🗑️</div>
+
+                <div style="
+                    position:absolute;
+                    top:10px;
+                    right:12px;
+                    background:#ffffffcc;
+                    padding:7px 10px;
+                    border-radius:10px;
+                    font-size:11px;
+                    font-weight:800;
+                    color:#075985;
+                ">
+                    📹 Video Sensing
+                </div>
+
+            </div>
+
+            <div class="action-row" style="margin-top:13px">
+
+                <button class="btn"
+                        onclick="simulateVideoMovement()">
+                    <i class="fa-solid fa-person-running"></i>
+                    Simulate Movement
+                </button>
+
+                <button class="btn btn-yellow"
+                        onclick="resetVideo()">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Reset
+                </button>
+
+            </div>
+
+            <div class="feedback" id="videoFeedback">
+                See how detected movement can trigger an action.
+            </div>
+
+            <p class="subtitle" style="margin-top:8px">
+                Button-controlled demo, not a live camera.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div class="tag" style="display:inline-block">
+                NEW CONCEPT
+            </div>
+
+            <h3 style="font-size:20px;font-weight:800;margin:12px 0">
+                Video Sensing
+            </h3>
+
+            <p class="subtitle" style="text-align:left">
+                Scratch can detect movement through a webcam.
+            </p>
+
+            <div style="
+                display:flex;
+                flex-direction:column;
+                align-items:flex-start;
+                gap:10px;
+                margin:17px 0;
+            ">
+
+                <span class="scratch scratch-event">
+                    when video motion &gt;
+                    <span class="bubble">10</span>
+                </span>
+
+                <span class="scratch scratch-sensing">
+                    video
+                    <span class="bubble">motion ▼</span>
+                    on
+                    <span class="bubble">Stage ▼</span>
+                </span>
+
+            </div>
+
+            
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 8 - CONTROL AND CONDITIONALS QUIZ -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide8">
+
+    <div class="tag">QUICK REVISION</div>
+
+    <h2 class="slide-title">
+        Control & Conditions
+    </h2>
+
+    <p class="subtitle">
+        Choose the correct Scratch blocks.
+    </p>
+
+    <div class="grid2">
+
+        <div class="card">
+
+            <p class="question">
+                1. Which block checks whether rubbish touches the bin?
+            </p>
+
+            <div class="quiz-options" data-quiz="sensing">
+
+                <button class="choice"
+                        onclick="answer('sensing',this,true)">
+
+                    <span class="scratch scratch-sensing">
+                        touching
+                        <span class="bubble">Bin ▼</span>
+                        ?
+                    </span>
+
+                </button>
+
+                <button class="choice"
+                        onclick="answer('sensing',this,false)">
+
+                    <span class="scratch scratch-motion">
+                        move
+                        <span class="bubble">10</span>
+                        steps
+                    </span>
+
+                </button>
+
+            </div>
+
+            <div class="feedback" id="sensing-feedback"></div>
+
+            
+
+
+        </div>
+
+        <div class="card">
+
+            <p class="question">
+                2. Which block runs instructions only when a condition is true?
+            </p>
+
+            <div class="quiz-options" data-quiz="conditions">
+
+                <button class="choice"
+                        onclick="answer('conditions',this,false)">
+
+                    <span class="scratch scratch-control">
+                        repeat
+                        <span class="bubble">10</span>
+                    </span>
+
+                </button>
+
+                <button class="choice"
+                        onclick="answer('conditions',this,true)">
+
+                    <span class="scratch scratch-control">
+                        if
+                        <span class="bubble">condition</span>
+                        then
+                    </span>
+
+                </button>
+
+            </div>
+
+            <div class="feedback" id="conditions-feedback"></div>
+
+            <div class="revision-row">
+                <button class="btn btn-outline">
+                                        <a href="https://scratchconceptconditions.vercel.app/" target="_blank">Revise Conditions</a> 
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 9 - SCORE GAME -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide9">
+
+    <div class="tag">PART 4 • SCORE</div>
+
+    <h2 class="slide-title">
+        Clean the Ocean!
+    </h2>
+
+    <div class="grid2">
+
+        <div class="card">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:10px;
+                gap:10px;
+            ">
+
+                <strong>🌊 Ocean Cleanup</strong>
+
+                <div class="tag" id="scoreBadge">
+                    ⭐ Score: 0
+                </div>
+
+            </div>
+
+            <div class="ocean" id="cleanupOcean">
+
+                <div class="ocean-bubbles">○ ○ ○</div>
+
+                <div class="fish"
+                     style="left:18%;top:50%">
+                    🐟
+                </div>
+
+                <button class="trash"
+                        id="trash1"
+                        onclick="collectTrash('trash1')"
+                        style="left:50%;top:15%;background:none;border:none"
+                        aria-label="Collect bottle">
+                    🧴
+                </button>
+
+                <button class="trash"
+                        id="trash2"
+                        onclick="collectTrash('trash2')"
+                        style="left:73%;top:50%;background:none;border:none"
+                        aria-label="Collect cup">
+                    🥤
+                </button>
+
+                <button class="trash"
+                        id="trash3"
+                        onclick="collectTrash('trash3')"
+                        style="left:38%;top:65%;background:none;border:none"
+                        aria-label="Collect paper">
+                    📰
+                </button>
+
+                <div class="bin" style="left:88%">
+                    🗑️
+                </div>
+
+                <div class="seaweed" style="left:10%">
+                    🌿
+                </div>
+
+            </div>
+
+            <p class="subtitle" style="margin-top:10px">
+                Click the rubbish to clean the ocean!
+            </p>
+
+            <div class="action-row" style="margin-top:12px">
+
+                <button class="btn btn-outline"
+                        onclick="resetCleanup()">
+
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Play Again
+
+                </button>
+
+            </div>
+
+            <div class="feedback" id="cleanupFeedback"></div>
+
+        </div>
+
+        <div class="card">
+
+            <h3 style="font-size:20px;font-weight:800;margin-bottom:12px">
+                Track Your Score!
+            </h3>
+
+            <p class="question">
+                Which block adds one point?
+            </p>
+
+            <div class="quiz-options" data-quiz="score">
+
+                <button class="choice"
+                        onclick="answer('score',this,false)">
+
+                    <span class="scratch scratch-variable">
+                        set
+                        <span class="bubble">Score ▼</span>
+                        to
+                        <span class="bubble">0</span>
+                    </span>
+
+                </button>
+
+                <button class="choice"
+                        onclick="answer('score',this,true)">
+
+                    <span class="scratch scratch-variable">
+                        change
+                        <span class="bubble">Score ▼</span>
+                        by
+                        <span class="bubble">1</span>
+                    </span>
+
+                </button>
+
+            </div>
+
+            <div class="feedback" id="score-feedback"></div>
+
+            <div class="revision-row">
+
+                <button class="btn btn-outline">
+                        
+                                        <a href="https://scratchconceptvariables.vercel.app/" target="_blank">Revise variables</a> 
+
+                </button>
+
+            </div>
+
+           
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- SLIDE 10 - FINAL CHALLENGE -->
+<!-- ================================================= -->
+
+<section class="slide" id="slide10">
+
+    <div class="tag">FINAL CHALLENGE</div>
+
+    <h2 class="slide-title">
+        Ready to Clean the Ocean?
+    </h2>
+
+    <div class="grid2">
+
+        <div class="card">
+
+            <p class="question">
+                1. What does this Scratch code do?
+            </p>
+
+            <div style="
+                background:var(--ghost);
+                border:2px dashed var(--pale);
+                border-radius:12px;
+                padding:12px;
+                display:flex;
+                flex-direction:column;
+                align-items:flex-start;
+                gap:4px;
+                margin-bottom:12px;
+            ">
+
+                <span class="scratch scratch-event">
+                    when ⚑ clicked
+                </span>
+
+                <span class="scratch scratch-control">
+                    forever
+                </span>
+
+                <span class="scratch scratch-motion"
+                      style="margin-left:18px">
+                    change x by
+                    <span class="bubble">5</span>
+                </span>
+
+            </div>
+
+            <div class="quiz-options" data-quiz="final1">
+
+                <button class="choice"
+                        onclick="answer('final1',this,true)">
+                    Moves right continuously
+                </button>
+
+                <button class="choice"
+                        onclick="answer('final1',this,false)">
+                    Moves left continuously
+                </button>
+
+            </div>
+
+            <div class="feedback" id="final1-feedback"></div>
+
+        </div>
+
+        <div class="card">
+
+            <p class="question">
+                2. What happens when this code runs?
+            </p>
+
+            <div style="
+                background:var(--ghost);
+                border:2px dashed var(--pale);
+                border-radius:12px;
+                padding:12px;
+                display:flex;
+                flex-direction:column;
+                align-items:flex-start;
+                gap:4px;
+                margin-bottom:12px;
+            ">
+
+                <span class="scratch scratch-event">
+                    when ⚑ clicked
+                </span>
+
+                <span class="scratch scratch-variable">
+                    set
+                    <span class="bubble">Score ▼</span>
+                    to
+                    <span class="bubble">0</span>
+                </span>
+
+                <span class="scratch scratch-variable">
+                    change
+                    <span class="bubble">Score ▼</span>
+                    by
+                    <span class="bubble">1</span>
+                </span>
+
+            </div>
+
+            <div class="quiz-options" data-quiz="final2">
+
+                <button class="choice"
+                        onclick="answer('final2',this,false)">
+                    Score becomes 0
+                </button>
+
+                <button class="choice"
+                        onclick="answer('final2',this,true)">
+                    Score becomes 1
+                </button>
+
+            </div>
+
+            <div class="feedback" id="final2-feedback"></div>
+
+        </div>
+
+    </div>
+
+    <button class="btn btn-yellow"
+            id="finishBtn"
+            onclick="finishLesson()"
+            style="font-size:15px;padding:13px 27px">
+
+        <i class="fa-solid fa-trophy"></i>
+        Finish Lesson
+
+    </button>
+
+    <div class="feedback" id="finishFeedback"></div>
+
+</section>
+
+</main>
+
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
+
+<footer>
+
+    <button class="btn btn-outline"
+            id="prevBtn"
+            onclick="go(currentSlide-1)">
+
+        <i class="fa-solid fa-arrow-left"></i>
+        Previous
+
+    </button>
+
+    <select id="slideSelect"
+            onchange="go(Number(this.value))">
+
+        <option value="1">1. Welcome</option>
+        <option value="2">2. Play Game</option>
+        <option value="3">3. Warm-Up</option>
+        <option value="4">4. Game Flow</option>
+        <option value="5">5. Design</option>
+        <option value="6">6. Fish Movement & Functions</option>
+        <option value="7">7. Video Sensing</option>
+        <option value="8">8. Control & Conditions</option>
+        <option value="9">9. Score</option>
+        <option value="10">10. Final Challenge</option>
+
+    </select>
+
+    <button class="btn"
+            id="nextBtn"
+            onclick="go(currentSlide+1)">
+
+        Next
+        <i class="fa-solid fa-arrow-right"></i>
+
+    </button>
+
+</footer>
+
+<script>
+
+/* =====================================================
+   ADD YOUR PRESENTATION LINKS HERE
+
+   Buttons stay visible even when links are empty.
+===================================================== */
+
+const REVISION_PPTS = {
+    video: "",
+    functions: "",
+    sensing: "",
+    conditions: "",
+    variables: ""
+};
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let currentSlide = 1;
+const totalSlides = 10;
+
+let soundEnabled = true;
+let audioContext = null;
+
+let fishX = 30;
+let fishY = 45;
+
+let sequenceProgress = 0;
+let cleanupScore = 0;
+
+let videoBusy = false;
+let videoTimer = null;
+
+const completed = {};
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function go(number) {
+
+    if (number < 1 || number > totalSlides) return;
+
+    currentSlide = number;
+
+    document.querySelectorAll(".slide").forEach(slide => {
+        slide.classList.remove("active");
+    });
+
+    document.getElementById("slide" + number)
+        .classList.add("active");
+
+    document.getElementById("slideCounter").textContent =
+        number + " / " + totalSlides;
+
+    document.getElementById("slideSelect").value = number;
+
+    document.getElementById("prevBtn").style.visibility =
+        number === 1 ? "hidden" : "visible";
+
+    document.getElementById("nextBtn").style.visibility =
+        number === totalSlides ? "hidden" : "visible";
+
+    document.getElementById("mainContent").scrollTop = 0;
+
+    if (number !== 7 && videoBusy) {
+        resetVideo();
+    }
+
+}
+
+/* =====================================================
+   SOUND
+===================================================== */
+
+function toggleSound() {
+
+    soundEnabled = !soundEnabled;
+
+    document.getElementById("soundBtn").innerHTML =
+        soundEnabled
+            ? '<i class="fa-solid fa-volume-high"></i>'
+            : '<i class="fa-solid fa-volume-xmark"></i>';
+
+}
+
+function playSound(success = true) {
+
+    if (!soundEnabled) return;
+
+    try {
+
+        audioContext ??= new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.frequency.value =
+            success ? 700 : 250;
+
+        gain.gain.setValueAtTime(
+            0.05,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime + 0.18
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.18
+        );
+
+    } catch (error) {}
+
+}
+
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+function celebrate(big = false) {
+
+    if (typeof confetti !== "function") return;
+
+    confetti({
+        particleCount: big ? 200 : 80,
+        spread: big ? 110 : 70,
+        origin: { y: 0.6 },
+        colors: [
+            "#5E48C4",
+            "#FFD071",
+            "#59E4FB",
+            "#22C55E",
+            "#ED5661"
+        ]
+    });
+
+}
+
+/* =====================================================
+   REVISION PRESENTATIONS
+===================================================== */
+
+function openConcept(topic) {
+
+    const url = REVISION_PPTS[topic];
+
+    if (url && url.trim() !== "") {
+
+        window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    } else {
+
+        alert("Revision link will be added soon.");
+
+    }
+
+}
+
+/* =====================================================
+   QUIZ SYSTEM
+===================================================== */
+
+const quizExplanations = {
+
+    functions:
+        'The custom block call runs the instructions defined for it.',
+
+    sensing:
+        'The touching block detects contact between sprites.',
+
+    conditions:
+        'The if block runs its instructions when the condition is true.',
+
+    score:
+        'Change Score by 1 increases the score by one point.',
+
+    final1:
+        'Positive X moves right. Forever repeats the movement.',
+
+    final2:
+        'The score starts at 0, then increases by 1.'
+
+};
+
+const wrongHints = {
+
+    functions:
+        'Define creates the instructions. Which block calls them?',
+
+    sensing:
+        'Look for the block that checks touching.',
+
+    conditions:
+        'Look for the block that checks a condition.',
+
+    score:
+        'Setting Score to 0 resets it. Which block adds a point?',
+
+    final1:
+        'Positive X moves toward the right side of the stage.',
+
+    final2:
+        'Follow both blocks in order.'
+
+};
+
+function answer(id, button, isCorrect) {
+
+    if (completed[id]) return;
+
+    const group = document.querySelector(
+        '[data-quiz="' + id + '"]'
+    );
+
+    const feedback = document.getElementById(
+        id + '-feedback'
+    );
+
+    group.querySelectorAll(".choice").forEach(choice => {
+        choice.classList.remove("wrong");
+    });
+
+    if (isCorrect) {
+
+        completed[id] = true;
+
+        button.classList.add("correct");
+
+        group.querySelectorAll("button").forEach(choice => {
+            choice.disabled = true;
+        });
+
+        feedback.textContent =
+            "Correct! " + quizExplanations[id];
+
+        feedback.style.color = "#15803D";
+
+        playSound(true);
+        celebrate();
+
+    } else {
+
+        button.classList.add("wrong");
+
+        feedback.textContent = wrongHints[id];
+
+        feedback.style.color = "#DC2626";
+
+        playSound(false);
+
+    }
+
+}
+
+/* =====================================================
+   SLIDE 3 - PREDICTION
+===================================================== */
+
+function choosePrediction(button) {
+
+    const buttons =
+        button.parentElement.querySelectorAll(".choice");
+
+    buttons.forEach(btn => {
+        btn.classList.remove("correct");
+    });
+
+    button.classList.add("correct");
+
+    document.getElementById("predictionFeedback")
+        .textContent =
+        "Nice idea! Let's see what the game does.";
+
+    playSound(true);
+
+}
+
+/* =====================================================
+   SLIDE 3 - SEQUENCE ACTIVITY
+===================================================== */
+
+function selectStep(button, step) {
+
+    if (button.disabled) return;
+
+    const feedback =
+        document.getElementById("sequenceFeedback");
+
+    if (step === sequenceProgress + 1) {
+
+        sequenceProgress++;
+
+        button.classList.add("selected");
+        button.disabled = true;
+
+        const number =
+            button.querySelector(".sequence-number");
+
+        if (number) {
+            number.textContent = sequenceProgress;
+        }
+
+        feedback.textContent =
+            "Great! Step " + sequenceProgress + " added.";
+
+        playSound(true);
+
+        if (sequenceProgress === 4) {
+
+            feedback.textContent =
+                "Perfect! You arranged all four steps!";
+
+            celebrate();
+
+        }
+
+    } else {
+
+        feedback.textContent =
+            "Try again! Think about what comes first.";
+
+        playSound(false);
+
+    }
+
+}
+
+function resetSequence() {
+
+    sequenceProgress = 0;
+
+    document.querySelectorAll(
+        "#sequenceChoices .sequence-item"
+    ).forEach(button => {
+
+        button.disabled = false;
+        button.classList.remove("selected");
+
+        const number =
+            button.querySelector(".sequence-number");
+
+        if (number) {
+            number.textContent = "?";
+        }
+
+    });
+
+    document.getElementById("sequenceFeedback")
+        .textContent = "";
+
+}
+
+/* =====================================================
+   SLIDE 5 - DESIGN
+===================================================== */
+
+function changeTrash(icon, button) {
+
+    document.getElementById("designTrash")
+        .textContent = icon;
+
+    const buttons =
+        button.parentElement.querySelectorAll(".choice");
+
+    buttons.forEach(btn => {
+        btn.classList.remove("correct");
+    });
+
+    button.classList.add("correct");
+
+    document.getElementById("designFeedback")
+        .textContent =
+        "Great choice! Your rubbish sprite is ready.";
+
+    playSound(true);
+
+}
+
+/* =====================================================
+   SLIDE 6 - FISH MOVEMENT
+===================================================== */
+
+function moveFish(dx, dy) {
+
+    fishX += dx * 10;
+    fishY += dy * 10;
+
+    fishX = Math.max(10, Math.min(90, fishX));
+    fishY = Math.max(15, Math.min(85, fishY));
+
+    const fish = document.getElementById("movingFish");
+
+    fish.style.left = fishX + "%";
+    fish.style.top = fishY + "%";
+
+    document.getElementById("fishFeedback")
+        .textContent =
+        "Fish position: x " + fishX +
+        "%, y " + fishY + "%";
+
+    playSound(true);
+
+}
+
+/* =====================================================
+   SLIDE 7 - VIDEO SENSING DEMO
+===================================================== */
+
+function simulateVideoMovement() {
+
+    if (videoBusy) return;
+
+    videoBusy = true;
+
+    const trash = document.getElementById("videoTrash");
+    const feedback = document.getElementById("videoFeedback");
+
+    feedback.textContent =
+        "Movement detected! Watch the rubbish move.";
+
+    trash.style.transition = "top 1.2s ease-in-out";
+    trash.style.top = "67%";
+
+    playSound(true);
+
+    videoTimer = setTimeout(() => {
+
+        feedback.textContent = "The rubbish moved!";
+
+        celebrate();
+
+        videoBusy = false;
+        videoTimer = null;
+
+    }, 1250);
+
+}
+
+function resetVideo() {
+
+    if (videoTimer !== null) {
+        clearTimeout(videoTimer);
+        videoTimer = null;
+    }
+
+    const trash = document.getElementById("videoTrash");
+
+    trash.style.transition = "none";
+    trash.style.top = "15%";
+
+    document.getElementById("videoFeedback")
+        .textContent =
+        "See how detected movement can trigger an action.";
+
+    videoBusy = false;
+
+}
+
+/* =====================================================
+   SLIDE 9 - CLEANUP GAME
+===================================================== */
+
+function collectTrash(id) {
+
+    const item = document.getElementById(id);
+
+    if (item.style.display === "none") return;
+
+    item.style.display = "none";
+
+    cleanupScore++;
+
+    document.getElementById("scoreBadge")
+        .textContent =
+        "⭐ Score: " + cleanupScore;
+
+    document.getElementById("cleanupFeedback")
+        .textContent =
+        "Great! You collected rubbish!";
+
+    playSound(true);
+
+    if (cleanupScore === 3) {
+
+        document.getElementById("cleanupFeedback")
+            .textContent =
+            "Amazing! The ocean is clean!";
+
+        celebrate();
+
+    }
+
+}
+
+function resetCleanup() {
+
+    cleanupScore = 0;
+
+    document.getElementById("scoreBadge")
+        .textContent = "⭐ Score: 0";
+
+    ["trash1", "trash2", "trash3"].forEach(id => {
+        document.getElementById(id).style.display = "block";
+    });
+
+    document.getElementById("cleanupFeedback")
+        .textContent = "";
+
+}
+
+/* =====================================================
+   FINISH LESSON
+===================================================== */
+
+function finishLesson() {
+
+    const feedback =
+        document.getElementById("finishFeedback");
+
+    if (!completed.final1 || !completed.final2) {
+
+        feedback.textContent =
+            "Complete both final questions first!";
+
+        feedback.style.color = "#DC2626";
+
+        return;
+
+    }
+
+    feedback.textContent =
+        "Lesson Complete! Great Job!";
+
+    feedback.style.color = "#15803D";
+
+    playSound(true);
+    celebrate(true);
+
+    setTimeout(() => celebrate(true), 400);
+
+}
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+go(1);
+
+</script>
+
+</body>
+</html>
